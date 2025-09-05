@@ -52,7 +52,9 @@ export async function shortenUrl(
     });
 
     return { success: true, hash: shortened.hash };
-  } catch {
+  } catch (error) {
+    console.log(error);
+
     return { success: false, error: "Invalid URL" };
   }
 }
