@@ -1,17 +1,30 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { shortenUrl } from '../lib/actions';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { shortenUrl } from "../lib/actions";
 
 const formSchema = z.object({
-  url: z.string().url({ message: 'Please enter a valid URL' }),
+  url: z.string().url({ message: "Please enter a valid URL" }),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -23,7 +36,7 @@ export default function Home() {
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
-    defaultValues: { url: '' },
+    defaultValues: { url: "" },
   });
 
   async function onSubmit(data: FormData) {
@@ -32,13 +45,13 @@ export default function Home() {
     setCopied(false);
 
     const response = await shortenUrl(data.url);
-    
+
     if (response.success && response.hash) {
       setResult({ url: `${window.location.origin}/r/${response.hash}` });
     } else {
-      setResult({ error: response.error || 'Failed to shorten URL' });
+      setResult({ error: response.error || "Failed to shorten URL" });
     }
-    
+
     setLoading(false);
   }
 
@@ -49,7 +62,7 @@ export default function Home() {
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
       } catch (err) {
-        console.error('Failed to copy:', err);
+        console.error("Failed to copy:", err);
       }
     }
   }
@@ -58,13 +71,17 @@ export default function Home() {
     <main className="container mx-auto px-4 py-8 max-w-2xl">
       <div className="text-center mb-8">
         <h1 className="text-4xl font-bold mb-2">URL Shortener</h1>
-        <p className="text-gray-600">Transform long URLs into short, shareable links</p>
+        <p className="text-gray-600">
+          Transform long URLs into short, shareable links
+        </p>
       </div>
 
       <Card>
         <CardHeader>
           <CardTitle>Shorten Your URL</CardTitle>
-          <CardDescription>Enter a URL below to get a shortened version</CardDescription>
+          <CardDescription>
+            Enter a URL below to get a shortened version
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <Form {...form}>
@@ -76,9 +93,9 @@ export default function Home() {
                   <FormItem>
                     <FormLabel>URL</FormLabel>
                     <FormControl>
-                      <Input 
-                        placeholder="https://example.com/very/long/url" 
-                        {...field} 
+                      <Input
+                        placeholder="https://example.com/very/long/url"
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
@@ -86,7 +103,7 @@ export default function Home() {
                 )}
               />
               <Button type="submit" disabled={loading} className="w-full">
-                {loading ? 'Shortening...' : 'Shorten URL'}
+                {loading ? "Shortening..." : "Shorten URL"}
               </Button>
             </form>
           </Form>
@@ -101,17 +118,17 @@ export default function Home() {
             <div className="p-4 bg-green-50 border border-green-200 rounded-md space-y-3">
               <h3 className="font-semibold text-green-800">Shortened URL:</h3>
               <div className="flex gap-2">
-                <Input 
-                  value={result.url} 
-                  readOnly 
+                <Input
+                  value={result.url}
+                  readOnly
                   className="bg-white font-mono text-sm"
                 />
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={copyToClipboard}
                   className="shrink-0"
                 >
-                  {copied ? '✓ Copied' : 'Copy'}
+                  {copied ? "✓ Copied" : "Copy"}
                 </Button>
               </div>
               <a
