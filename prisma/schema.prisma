@@ -15,6 +15,6 @@ model ShortenedUrl {
   hash        String   @unique
   originalUrl String
   createdAt   DateTime @default(now())
-  
+
   @@map("shortened_urls")
 }
